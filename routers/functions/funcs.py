@@ -2,8 +2,18 @@ from datetime import datetime as dt
 
 from aiogram import Router, F
 from aiogram.types import Message
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 router = Router()
+
+
+def make_keyboard(options, row):
+    width = len(options)
+    width = width + 1 if width % 2 != 0 else width
+    buttons = [KeyboardButton(text=str(o)) for o in options]
+    keyboard = [buttons[i:i + row] for i in range(0, width, row)]
+    markup = ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
+    return markup
 
 
 def get_age(date_str: str) -> int:
