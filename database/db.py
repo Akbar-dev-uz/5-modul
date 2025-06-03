@@ -45,8 +45,14 @@ class Database:
                 except psycopg2.ProgrammingError:
                     return None
 
+    def check_user(self, user_id):
+        check = self.execute("SELECT * FROM users WHERE user_id=%s", (user_id,))
+        if check:
+            return True
+        return False
+
     def insert_users(self, username, first_name, last_name, chat_id, user_id):
-        check = self.execute("SELECT * FROM users WHERE chat_id=%s AND user_id=%s", (chat_id, user_id))
+        check = self.check_user(user_id)
         if not check:
             try:
                 self.execute("""
