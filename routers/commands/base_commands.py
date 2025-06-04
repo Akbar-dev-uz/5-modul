@@ -10,7 +10,7 @@ from multi_lan.translate.google_tr import get_text
 router_base = Router(name=__name__)
 
 
-print("✅ base_commands.py загружен")  # <- Поставь прямо тут
+print("✅ base_commands.py загружен")
 
 
 @router_base.message(CommandStart())

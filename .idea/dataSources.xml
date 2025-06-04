@@ -22,5 +22,12 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/post_alchemy</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="db_bot_pg@dpg-d0vtciemcj7s73fvfri0-a.oregon-postgres.render.com" uuid="3c2af752-6c8d-4310-8abd-fd93839bf32e">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://dpg-d0vtciemcj7s73fvfri0-a.oregon-postgres.render.com:5432/db_bot_pg</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
