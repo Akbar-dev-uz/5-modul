@@ -7,7 +7,7 @@ from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 from typing import List, Union
 
-from database.sql_alchemy import UsersMlt
+from database.db import UsersMlt, Database
 from routers.states.state_for_register import StateForRegister
 import re
 
@@ -123,7 +123,8 @@ async def email_insert(message: Message, state: FSMContext) -> None:
         email=data.get("email"),
     )
     try:
-        user.save()
+        db = Database()
+        db.save(user)
     except Exception as e:
         await message.answer("❌ Произошла ошибка при сохранении. Попробуйте позже.")
         print("Ошибка при сохранении:", e)
