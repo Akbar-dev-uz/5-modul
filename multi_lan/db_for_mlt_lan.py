@@ -1,15 +1,10 @@
 import psycopg2
+from bot_run.bot import DB_URL
 
 
 class Database:
     def __init__(self):
-        self.conn = psycopg2.connect(
-            dbname="test_bot_db",
-            user="postgres",
-            password="1234",
-            host="localhost",
-            port="5432"
-        )
+        self.conn = psycopg2.connect(DB_URL)
         self.create()
 
     def create(self):

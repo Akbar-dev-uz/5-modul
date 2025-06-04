@@ -1,7 +1,8 @@
-from sqlalchemy import create_engine, text, Column, ForeignKey, Integer, String, BIGINT, DateTime, func
+from sqlalchemy import create_engine, Column, Integer, String, BIGINT, DateTime, func
 from sqlalchemy.orm import declarative_base, sessionmaker
+from bot_run.bot import DB_URL
 
-engine = create_engine("postgresql://postgres:1234@localhost:5432/test_bot_db")
+engine = create_engine(DB_URL)
 Base = declarative_base()
 
 SessionLocal = sessionmaker(bind=engine)

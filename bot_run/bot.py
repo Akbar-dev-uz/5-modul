@@ -15,6 +15,7 @@ from aiogram.client.default import DefaultBotProperties
 load_dotenv()
 TOKEN = getenv("BOT_TOKEN")
 ADMINS = getenv("ADMINS")
+DB_URL = getenv("DB_URL")
 
 dp = Dispatcher(storage=MemoryStorage())
 dp.include_router(router)
