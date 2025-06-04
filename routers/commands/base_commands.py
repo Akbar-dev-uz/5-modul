@@ -7,10 +7,13 @@ from routers.functions.funcs import make_keyboard
 from routers.keyboards.inline_keyboards import make_inline_kb
 from multi_lan.translate.google_tr import get_text
 
-router = Router(name=__name__)
+router_base = Router(name=__name__)
 
 
-@router.message(CommandStart())
+print("✅ base_commands.py загружен")  # <- Поставь прямо тут
+
+
+@router_base.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
     db = Database()
 
@@ -33,7 +36,7 @@ async def command_start_handler(message: Message) -> None:
     print(message.from_user.full_name, message.text)
 
 
-@router.message(Command("register"))
+@router_base.message(Command("register"))
 async def command_register_handler(message: Message) -> None:
     db = Database()
 
@@ -45,7 +48,7 @@ async def command_register_handler(message: Message) -> None:
     print(message.from_user.full_name, message.text)
 
 
-@router.message(Command("help"))
+@router_base.message(Command("help"))
 async def command_help_handler(message: Message) -> None:
     await message.reply(text=f'По другим вопросам обращайтесь к <a href="https://t.me/Pulemetttka">Акбару</a>!',
                         reply_markup=make_keyboard(["/start", "/followers", "/change", "/get_currency", "/register"],
@@ -59,7 +62,7 @@ async def command_help_handler(message: Message) -> None:
     print(message.from_user.full_name, message.text)
 
 
-@router.message(Command("followers"))
+@router_base.message(Command("followers"))
 async def command_followers_handler(message: Message) -> None:
     db = Database()
     followers = db.execute("SELECT COUNT(*) FROM users")
@@ -67,14 +70,14 @@ async def command_followers_handler(message: Message) -> None:
     print(message.from_user.full_name, message.text)
 
 
-@router.message(Command("change"))
+@router_base.message(Command("change"))
 async def command_change_lan(message: Message) -> None:
     await message.answer("Привет выберите язык!",
                          reply_markup=make_inline_kb(["🇺🇿 uz", "🇷🇺 ru", "🇺🇸 en"], ["uz", "ru", "en"], 2))
     print(message.from_user.full_name, message.text)
 
 
-@router.message(Command("get_currency"))
+@router_base.message(Command("get_currency"))
 async def command_start_handler(message: Message) -> None:
     await message.answer(f"Выберите что хотите получить",
                          reply_markup=make_inline_kb(["USD", "RUB", "EUR", "UZS"], ["USD", "RUB", "EUR", "UZS"], 2))
