@@ -2,10 +2,9 @@ from aiogram import Router
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, ReplyKeyboardRemove
-from database.db import Database
+from database.db import Database, User
 from routers.functions.funcs import make_keyboard
 from routers.keyboards.inline_keyboards import make_inline_kb
-from multi_lan.db_for_mlt_lan import Database as DB_mlt_lan
 from multi_lan.translate.google_tr import get_text
 
 router = Router(name=__name__)
@@ -13,32 +12,32 @@ router = Router(name=__name__)
 
 @router.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
-    db_mlt = DB_mlt_lan()
     db = Database()
 
-    if db_mlt.check_user(message.from_user.id):
+    if db.check_user_mlt(message.from_user.id):
         text = get_text(message.from_user.id, message.from_user.full_name)
         await message.answer(f"{text}",
                              reply_markup=make_keyboard(["/game"], 1))
     else:
         await message.answer("Вы еще не зарегестрированы, для регистрации нажмите на /register",
                              reply_markup=make_keyboard(["/register"]))
-
-    db.insert_users(
-        message.from_user.username,
-        message.from_user.first_name,
-        message.from_user.last_name,
-        message.chat.id,
-        message.from_user.id)
+    user = User(
+        username=message.from_user.username,
+        first_name=message.from_user.first_name,
+        last_name=message.from_user.last_name,
+        chat_id=message.chat.id,
+        user_id=message.from_user.id
+    )
+    db.save(user)
 
     print(message.from_user.full_name, message.text)
 
 
 @router.message(Command("register"))
 async def command_register_handler(message: Message) -> None:
-    db_mlt = DB_mlt_lan()
+    db = Database()
 
-    if not db_mlt.check_user(message.from_user.id):
+    if not db.check_user_mlt(message.from_user.id):
         await message.answer("Привет выберите язык!",
                              reply_markup=make_inline_kb(["🇺🇿 uz", "🇷🇺 ru", "🇺🇸 en"], ["uz", "ru", "en"], 2))
     else:
@@ -62,7 +61,7 @@ async def command_help_handler(message: Message) -> None:
 
 @router.message(Command("followers"))
 async def command_followers_handler(message: Message) -> None:
-    db = DB_mlt_lan()
+    db = Database()
     followers = db.execute("SELECT COUNT(*) FROM users")
     await message.answer(f"Бота использовали {followers[0][0]} Пользователей🤩", reply_markup=ReplyKeyboardRemove())
     print(message.from_user.full_name, message.text)

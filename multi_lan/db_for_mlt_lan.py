@@ -46,13 +46,10 @@ class Database:
             else:
                 print(f"User {username} successfully registered")
 
-    def check_user(self, user_id):
+    def check_mlt_user(self, user_id):
         user = self.execute("SELECT * FROM users_mlt_lan WHERE user_id = %s", (user_id,))
         if user:
             return True
         else:
             return False
 
-    def get_lang(self, user_id):
-        res = self.execute("SELECT lang FROM users_mlt_lan WHERE user_id = %s", (user_id,))
-        return res[0][0] if res else None

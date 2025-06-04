@@ -1,6 +1,6 @@
 import json
 from os import path
-from multi_lan.db_for_mlt_lan import Database
+from database.db import Database
 
 BASE_DIR = path.dirname(path.dirname(__file__))
 
@@ -13,5 +13,3 @@ def get_text(user_id, full_name):
         text = data["start"].format(full_name=full_name)
         return text
 
-
-print(BASE_DIR)

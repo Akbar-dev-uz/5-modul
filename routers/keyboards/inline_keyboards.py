@@ -2,8 +2,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from aiogram import F, Router
 
-from database.sql_alchemy import UsersMlt
-from multi_lan.db_for_mlt_lan import Database
+from database.db import Database
 from api.get_valute import get_currency
 from routers.states.state_for_register import StateForRegister
 from routers.functions.funcs import send_phone_num
@@ -24,7 +23,7 @@ def make_inline_kb(texts: list[str], callback_data: list[str], row):
 async def catch_uz(call: CallbackQuery, state: FSMContext):
     await call.message.edit_text("🇺🇿Siz o`zbek tilini tanglandingiz!")
     db = Database()
-    if db.check_user(call.from_user.id):
+    if db.check_user_mlt(call.from_user.id):
         db.execute("UPDATE users_mlt_lan SET lang = %s WHERE user_id = %s", ('uz', call.from_user.id,))
         return
     await state.update_data(lang='uz')
@@ -37,7 +36,7 @@ async def catch_uz(call: CallbackQuery, state: FSMContext):
 async def catch_ru(call: CallbackQuery, state: FSMContext):
     db = Database()
     await call.message.edit_text("🇷🇺Вы выбрали русский язык!")
-    if db.check_user(call.from_user.id):
+    if db.check_user_mlt(call.from_user.id):
         db.execute("UPDATE users_mlt_lan SET lang = %s WHERE user_id = %s", ('ru', call.from_user.id,))
         return
     await state.update_data(lang='ru')
@@ -50,7 +49,7 @@ async def catch_ru(call: CallbackQuery, state: FSMContext):
 async def catch_en(call: CallbackQuery, state: FSMContext):
     db = Database()
     await call.message.edit_text("🇺🇸You chosen English language!")
-    if db.check_user(call.from_user.id):
+    if db.check_user_mlt(call.from_user.id):
         db.execute("UPDATE users_mlt_lan SET lang = %s WHERE user_id = %s", ('en', call.from_user.id,))
         return
     await state.update_data(lang='en')
