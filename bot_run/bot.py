@@ -41,6 +41,8 @@ async def on_shutdown(bot: Bot):
 async def main() -> None:
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
+    await bot.delete_webhook(drop_pending_updates=True)
+
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
 
