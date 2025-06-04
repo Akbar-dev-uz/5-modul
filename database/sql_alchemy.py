@@ -1,7 +1,11 @@
 from sqlalchemy import create_engine, Column, Integer, String, BIGINT, DateTime, func
 from sqlalchemy.orm import declarative_base, sessionmaker
-from bot_run.bot import DB_URL
+from dotenv import load_dotenv
+from os import getenv
 
+load_dotenv()
+
+DB_URL = getenv("DB_URL")
 engine = create_engine(DB_URL)
 Base = declarative_base()
 
