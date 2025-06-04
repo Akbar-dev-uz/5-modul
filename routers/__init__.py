@@ -1,7 +1,7 @@
 __all__ = ("router",)
 
 from aiogram import Router
-from .commands.base_commands import router_base as commands_router
+from .commands import router as commands_router
 from .functions.funcs import router as functions_router
 from .keyboards import router as keyboards_router
 
