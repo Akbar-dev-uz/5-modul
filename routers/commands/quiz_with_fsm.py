@@ -6,9 +6,8 @@ from aiogram.filters import Command
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove
-from database.db import Database
+from database.db import Database, Game
 from routers.functions.funcs import make_keyboard
-
 
 router = Router()
 db = Database()
@@ -76,11 +75,10 @@ async def finish_quiz(message: Message, state: FSMContext):
     await message.answer(results, reply_markup=ReplyKeyboardRemove())
     await state.clear()
 
-    def get_in_base():
-        db.db_for_game()
-        db.insert_games(message.from_user.username, message.chat.id, message.from_user.id, "Matematika",
-                        results)
+    user_game = Game(usrname=message.from_user.username, chat_id=message.chat.id, user_id=message.from_user.id,
+                     category="Matematika",
+                     results=results)
 
-    await asyncio.to_thread(get_in_base)
+    db.save(user_game)
 
     print(message.from_user.full_name, message.text)

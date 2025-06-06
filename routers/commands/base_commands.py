@@ -2,15 +2,29 @@ from aiogram import Router
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, ReplyKeyboardRemove
+from pyexpat.errors import messages
+
 from database.db import Database, User
 from routers.functions.funcs import make_keyboard
 from routers.keyboards.inline_keyboards import make_inline_kb
 from multi_lan.translate.google_tr import get_text
+import gettext
+
+
+LANGUAGES = ['ru', 'en']
+
+translations = {
+    lang: gettext.translation(
+        domain=messages, localedir="translations", languages=[lang]
+    ) for lang in LANGUAGES
+}
+
+
+def get_translations(lang: str):
+    return translations.get(lang, translations['en'])
+
 
 router_base = Router(name=__name__)
-
-
-print("✅ base_commands.py загружен")
 
 
 @router_base.message(CommandStart())
