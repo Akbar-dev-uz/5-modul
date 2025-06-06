@@ -75,7 +75,7 @@ async def finish_quiz(message: Message, state: FSMContext):
     await message.answer(results, reply_markup=ReplyKeyboardRemove())
     await state.clear()
 
-    user_game = Game(usrname=message.from_user.username, chat_id=message.chat.id, user_id=message.from_user.id,
+    user_game = Game(username=message.from_user.username, chat_id=message.chat.id, user_id=message.from_user.id,
                      category="Matematika",
                      results=results)
 
