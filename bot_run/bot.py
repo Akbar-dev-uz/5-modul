@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
-from middlewares.i18n import i18n
+from middlewares.i18n import i18n_middleware
 
 load_dotenv()
 TOKEN = getenv("BOT_TOKEN")
@@ -47,9 +47,9 @@ async def main() -> None:
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
 
-    dp.update.outer_middleware(i18n)
+    dp.update.outer_middleware(i18n_middleware)
 
-    await i18n.startup(dp)
+    await i18n_middleware.startup(dp)
     await dp.start_polling(bot)
 
 

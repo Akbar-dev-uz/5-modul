@@ -6,8 +6,8 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from database.db import Database, User
 from routers.functions.funcs import make_keyboard
 from routers.keyboards.inline_keyboards import make_inline_kb
-# from multi_lan.translate.google_tr import get_text
-from aiogram_i18n import LazyProxy as _
+from aiogram.utils.i18n import gettext as _
+from middlewares.i18n import i18n
 
 router_base = Router(name=__name__)
 
@@ -17,7 +17,8 @@ async def command_start_handler(message: Message) -> None:
     db = Database()
 
     if db.check_user_mlt(message.from_user.id):
-        greeting = str(_("start")).format(full_name=message.from_user.full_name)
+        lang = db.get_lang(message.from_user.id)
+        greeting = str(_("start", locale=lang)).format(full_name=message.from_user.full_name)
         await message.answer(greeting, reply_markup=make_keyboard(["/game"], 1))
     else:
         await message.answer(str(_("Вы еще не зарегестрированы, для регистрации нажмите на /register")),
@@ -39,7 +40,7 @@ async def command_register_handler(message: Message) -> None:
     db = Database()
 
     if not db.check_user_mlt(message.from_user.id):
-        await message.answer("Привет выберите язык!",
+        await message.answer(_("Привет выберите язык!"),
                              reply_markup=make_inline_kb(["🇺🇿 uz", "🇷🇺 ru", "🇺🇸 en"], ["uz", "ru", "en"], 2))
     else:
         await message.answer(_("Вы уже зарегестрированы😊"))
