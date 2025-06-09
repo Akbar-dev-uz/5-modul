@@ -2,10 +2,10 @@ from datetime import datetime as dt
 
 from aiogram import Router, F
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 from typing import List, Union
+from aiogram.types import Message, CallbackQuery, InlineQuery, ChatMemberUpdated
 
 from database.db import UsersMlt, Database
 from routers.states.state_for_register import StateForRegister
@@ -134,14 +134,20 @@ async def email_insert(message: Message, state: FSMContext) -> None:
     await state.clear()
 
 
-async def get_locale(event: Message, *args, **kwargs) -> str:
-    from database.db import Database
+def get_user_id(event) -> int | None:
+    return getattr(getattr(event, "from_user", None), "id", None)
+
+
+async def get_locale(event, *args, **kwargs) -> str:
+    user_id = get_user_id(event)
+    if not user_id:
+        return "en"
+
     db = Database()
-    user_lang = db.get_lang(event.from_user.id)
-    return user_lang or "en"
+    return db.get_lang(user_id) or "en"
 
 
-@router.message()
+@router.message(F.text)
 async def not_exist_func(message: Message) -> None:
     await message.reply(
         f'Я не распознал такую команду, Обратитесь к <a href="https://t.me/Pulemetttka">Акбару</a> за помощью')
