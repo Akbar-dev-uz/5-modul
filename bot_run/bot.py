@@ -47,8 +47,9 @@ async def main() -> None:
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
 
-    dp.message.middleware(i18n)
+    dp.update.outer_middleware(i18n)
 
+    await i18n.startup()
     await dp.start_polling(bot)
 
 
