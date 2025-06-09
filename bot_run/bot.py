@@ -49,7 +49,7 @@ async def main() -> None:
 
     dp.update.outer_middleware(i18n)
 
-    await i18n.startup()
+    await i18n.startup(dp)
     await dp.start_polling(bot)
 
 
