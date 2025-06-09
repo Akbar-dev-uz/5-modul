@@ -6,22 +6,8 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from database.db import Database, User
 from routers.functions.funcs import make_keyboard
 from routers.keyboards.inline_keyboards import make_inline_kb
-from multi_lan.translate.google_tr import get_text
-# import gettext
-#
-#
-# LANGUAGES = ['ru', 'en']
-#
-# translations = {
-#     lang: gettext.translation(
-#         domain=messages, localedir="translations", languages=[lang]
-#     ) for lang in LANGUAGES
-# }
-#
-#
-# def get_translations(lang: str):
-#     return translations.get(lang, translations['en'])
-
+# from multi_lan.translate.google_tr import get_text
+from aiogram_i18n import LazyProxy as _
 
 router_base = Router(name=__name__)
 
@@ -31,11 +17,12 @@ async def command_start_handler(message: Message) -> None:
     db = Database()
 
     if db.check_user_mlt(message.from_user.id):
-        text = get_text(message.from_user.id, message.from_user.full_name)
-        await message.answer(f"{text}",
+        text = _("start")
+        await message.answer(text.format(full_name=message.from_user.full_name),
                              reply_markup=make_keyboard(["/game"], 1))
     else:
-        await message.answer("Вы еще не зарегестрированы, для регистрации нажмите на /register",
+        text = _("Вы еще не зарегестрированы, для регистрации нажмите на /register")
+        await message.answer(f"{text}",
                              reply_markup=make_keyboard(["/register"]))
     user = User(
         username=message.from_user.username,
@@ -57,15 +44,16 @@ async def command_register_handler(message: Message) -> None:
         await message.answer("Привет выберите язык!",
                              reply_markup=make_inline_kb(["🇺🇿 uz", "🇷🇺 ru", "🇺🇸 en"], ["uz", "ru", "en"], 2))
     else:
-        await message.answer("Вы уже зарегестрированы😊")
+        await message.answer(_("Вы уже зарегестрированы😊"))
     print(message.from_user.full_name, message.text)
 
 
 @router_base.message(Command("help"))
 async def command_help_handler(message: Message) -> None:
     await message.reply(text=f'По другим вопросам обращайтесь к <a href="https://t.me/Pulemetttka">Акбару</a>!',
-                        reply_markup=make_keyboard(["/start", "/followers", "/change", "/get_currency", "/register"],
-                                                   2), parse_mode=ParseMode.HTML)
+                        reply_markup=make_keyboard(
+                            ["/start", "/followers", "/change", "/get_currency", "/register"],
+                            2), parse_mode=ParseMode.HTML)
     info = (
         f"chat_id = {message.chat.id}\n"
         f"user_id = {message.from_user.id}\n"
