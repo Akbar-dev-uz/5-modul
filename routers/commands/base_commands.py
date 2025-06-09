@@ -17,12 +17,10 @@ async def command_start_handler(message: Message) -> None:
     db = Database()
 
     if db.check_user_mlt(message.from_user.id):
-        text = _("start")
-        await message.answer(text.format(full_name=message.from_user.full_name),
-                             reply_markup=make_keyboard(["/game"], 1))
+        greeting = str(_("start")).format(full_name=message.from_user.full_name)
+        await message.answer(greeting, reply_markup=make_keyboard(["/game"], 1))
     else:
-        text = _("Вы еще не зарегестрированы, для регистрации нажмите на /register")
-        await message.answer(f"{text}",
+        await message.answer(str(_("Вы еще не зарегестрированы, для регистрации нажмите на /register")),
                              reply_markup=make_keyboard(["/register"]))
     user = User(
         username=message.from_user.username,
@@ -79,7 +77,7 @@ async def command_change_lan(message: Message) -> None:
 
 
 @router_base.message(Command("get_currency"))
-async def command_start_handler(message: Message) -> None:
+async def get_currency(message: Message) -> None:
     await message.answer(f"Выберите что хотите получить",
                          reply_markup=make_inline_kb(["USD", "RUB", "EUR", "UZS"], ["USD", "RUB", "EUR", "UZS"], 2))
     print(message.from_user.full_name, message.text)
