@@ -23,7 +23,10 @@ def make_inline_kb(texts: list[str], callback_data: list[str], row):
 async def catch_uz(call: CallbackQuery, state: FSMContext):
     await call.message.edit_text("🇺🇿Siz o`zbek tilini tanglandingiz!")
     if db.check_user_mlt(call.from_user.id):
-        db.execute("UPDATE users_mlt_lan SET lang = %s WHERE user_id = %s", [('uz', call.from_user.id,)])
+        db.execute(
+            "UPDATE users_mlt_lan SET lang = :lang WHERE user_id = :user_id",
+            {'lang': 'uz', 'user_id': call.from_user.id}
+        )
         return
     await state.update_data(lang='uz')
     text = "📱 Telefon nomeringizni kiriting:"
@@ -35,7 +38,10 @@ async def catch_uz(call: CallbackQuery, state: FSMContext):
 async def catch_ru(call: CallbackQuery, state: FSMContext):
     await call.message.edit_text("🇷🇺Вы выбрали русский язык!")
     if db.check_user_mlt(call.from_user.id):
-        db.execute("UPDATE users_mlt_lan SET lang = %s WHERE user_id = %s", ('ru', call.from_user.id,))
+        db.execute(
+            "UPDATE users_mlt_lan SET lang = :lang WHERE user_id = :user_id",
+            {'lang': 'ru', 'user_id': call.from_user.id}
+        )
         return
     await state.update_data(lang='ru')
     text = "📱 Введите телефон номер:"
@@ -47,7 +53,10 @@ async def catch_ru(call: CallbackQuery, state: FSMContext):
 async def catch_en(call: CallbackQuery, state: FSMContext):
     await call.message.edit_text("🇺🇸You chosen English language!")
     if db.check_user_mlt(call.from_user.id):
-        db.execute("UPDATE users_mlt_lan SET lang = %s WHERE user_id = %s", ('en', call.from_user.id,))
+        db.execute(
+            "UPDATE users_mlt_lan SET lang = :lang WHERE user_id = :user_id",
+            {'lang': 'en', 'user_id': call.from_user.id}
+        )
         return
     await state.update_data(lang='en')
     text = "📱 Get your phone number:"

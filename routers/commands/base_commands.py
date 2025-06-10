@@ -58,8 +58,9 @@ async def command_help_handler(message: Message) -> None:
 
 @router_base.message(Command("followers"))
 async def command_followers_handler(message: Message) -> None:
-    followers = db.execute("SELECT COUNT(*) FROM users")
-    await message.answer(f"Бота использовали {followers[0][0]} Пользователей🤩", reply_markup=ReplyKeyboardRemove())
+    result = db.execute("SELECT COUNT(*) AS count FROM users")
+    count = result.scalar()
+    await message.answer(f"Бота использовали {count} Пользователей🤩", reply_markup=ReplyKeyboardRemove())
     print(message.from_user.full_name, message.text)
 
 

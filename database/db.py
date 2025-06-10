@@ -136,7 +136,7 @@ class Database:
             return False
 
     @staticmethod
-    def check_user_mlt(user_id):
+    def check_user_mlt(user_id: int):
         with SessionLocal() as session:
             exists = session.query(UsersMlt).filter_by(user_id=user_id).first()
             if exists:
@@ -161,8 +161,7 @@ class Database:
     @staticmethod
     def get_lang(user_id):
         with SessionLocal() as session:
-            res = session.query(UsersMlt.lang).filter_by(user_id=user_id).first()
-        return res[0] if res else None
+            return session.query(UsersMlt.lang).filter_by(user_id=user_id).scalar()
 
 
 db = Database()
