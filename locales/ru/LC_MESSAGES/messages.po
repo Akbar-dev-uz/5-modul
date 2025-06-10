@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-06-10 16:52+0500\n"
+"POT-Creation-Date: 2025-06-11 01:03+0500\n"
 "PO-Revision-Date: 2025-06-09 18:39+0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -30,17 +30,37 @@ msgstr ""
 msgid "Вы еще не зарегистрированы, для регистрации нажмите на /register"
 msgstr "Вы еще не зарегестрированы, для регистрации нажмите на /register"
 
-#: routers/commands/base_commands.py:37
+#: routers/commands/base_commands.py:38
 msgid "Привет выберите язык!"
 msgstr "Привет выберите язык!"
 
-#: routers/commands/base_commands.py:40
+#: routers/commands/base_commands.py:41
 #, fuzzy
 msgid "Вы уже зарегистрированы😊"
 msgstr "Вы уже зарегестрированы😊"
 
-#: routers/commands/base_commands.py:83
+#: routers/commands/base_commands.py:84
 #, python-brace-format
 msgid "Salom {full_name}!"
 msgstr "Привет {full_name}!"
+
+#: routers/keyboards/inline_keyboards.py:39
+msgid "✅ Language selected"
+msgstr "✅ Язык выбран"
+
+#: routers/keyboards/inline_keyboards.py:48
+msgid "❌ Ошибка при обновлении языка."
+msgstr "❌ Ошибка при обновлении языка."
+
+#: routers/keyboards/inline_keyboards.py:51
+msgid "❌ Пользователь не найден в базе данных."
+msgstr "❌ Пользователь не найден в базе данных."
+
+#: routers/keyboards/inline_keyboards.py:53
+msgid "✅ Язык успешно обновлен!"
+msgstr "✅ Язык успешно обновлен!"
+
+#: routers/keyboards/inline_keyboards.py:56
+msgid "📱 Telefon nomeringizni kiriting:"
+msgstr "📱 Пожалуйста, введите свой номер телефона:"
 

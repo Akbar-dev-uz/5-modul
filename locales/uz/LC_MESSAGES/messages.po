@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-06-10 16:52+0500\n"
+"POT-Creation-Date: 2025-06-11 01:03+0500\n"
 "PO-Revision-Date: 2025-06-09 18:39+0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: uz\n"
@@ -31,17 +31,37 @@ msgstr ""
 "Siz hali ro'yxatdan o'tmagansiz, ro'yxatdan o'tish uchun /register "
 "tugmasini bosing"
 
-#: routers/commands/base_commands.py:37
+#: routers/commands/base_commands.py:38
 msgid "Привет выберите язык!"
 msgstr "Salom, tilni tangla"
 
-#: routers/commands/base_commands.py:40
+#: routers/commands/base_commands.py:41
 #, fuzzy
 msgid "Вы уже зарегистрированы😊"
 msgstr "Siz allaqachon ro'yxatdan o'tgansiz😊"
 
-#: routers/commands/base_commands.py:83
+#: routers/commands/base_commands.py:84
 #, python-brace-format
 msgid "Salom {full_name}!"
 msgstr "Salom {full_name}!"
+
+#: routers/keyboards/inline_keyboards.py:39
+msgid "✅ Language selected"
+msgstr "✅ Til tanlandi"
+
+#: routers/keyboards/inline_keyboards.py:48
+msgid "❌ Ошибка при обновлении языка."
+msgstr "❌ Tilni yangilashda xatolik yuz berdi."
+
+#: routers/keyboards/inline_keyboards.py:51
+msgid "❌ Пользователь не найден в базе данных."
+msgstr "❌ Foydalanuvchi ma'lumotlar bazasida topilmadi."
+
+#: routers/keyboards/inline_keyboards.py:53
+msgid "✅ Язык успешно обновлен!"
+msgstr "✅ Til muvaffaqiyatli yangilandi!"
+
+#: routers/keyboards/inline_keyboards.py:56
+msgid "📱 Telefon nomeringizni kiriting:"
+msgstr "📱 Telefon nomeringizni kiriting:"
 
