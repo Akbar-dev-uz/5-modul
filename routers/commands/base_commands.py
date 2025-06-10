@@ -76,3 +76,9 @@ async def get_currency(message: Message) -> None:
     await message.answer(f"Выберите что хотите получить",
                          reply_markup=make_inline_kb(["USD", "RUB", "EUR", "UZS"], ["USD", "RUB", "EUR", "UZS"], 2))
     print(message.from_user.full_name, message.text)
+
+
+@router_base.message(Command("check"))
+async def get_currency(message: Message) -> None:
+    await message.answer(_("Salom {full_name}!").format(full_name=message.from_user.full_name))
+    print(message.from_user.full_name, message.text)

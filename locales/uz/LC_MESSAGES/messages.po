@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-06-10 02:16+0500\n"
+"POT-Creation-Date: 2025-06-10 16:52+0500\n"
 "PO-Revision-Date: 2025-06-09 18:39+0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: uz\n"
@@ -18,23 +18,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: routers/commands/base_commands.py:21
+#: routers/commands/base_commands.py:17
 msgid "start"
 msgstr ""
 "<b>Salom, {full_name}!</b>\n"
 "O‘yinni boshlash uchun /game buyrug‘ini bosing!"
 
-#: routers/commands/base_commands.py:24
-msgid "Вы еще не зарегестрированы, для регистрации нажмите на /register"
+#: routers/commands/base_commands.py:20
+#, fuzzy
+msgid "Вы еще не зарегистрированы, для регистрации нажмите на /register"
 msgstr ""
 "Siz hali ro'yxatdan o'tmagansiz, ro'yxatdan o'tish uchun /register "
 "tugmasini bosing"
 
-#: routers/commands/base_commands.py:43
+#: routers/commands/base_commands.py:37
 msgid "Привет выберите язык!"
 msgstr "Salom, tilni tangla"
 
-#: routers/commands/base_commands.py:46
-msgid "Вы уже зарегестрированы😊"
+#: routers/commands/base_commands.py:40
+#, fuzzy
+msgid "Вы уже зарегистрированы😊"
 msgstr "Siz allaqachon ro'yxatdan o'tgansiz😊"
+
+#: routers/commands/base_commands.py:83
+#, python-brace-format
+msgid "Salom {full_name}!"
+msgstr "Salom {full_name}!"
 
