@@ -163,3 +163,6 @@ class Database:
         with SessionLocal() as session:
             res = session.query(UsersMlt.lang).filter_by(user_id=user_id).first()
         return res[0] if res else None
+
+
+db = Database()

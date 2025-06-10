@@ -3,21 +3,19 @@ from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, ReplyKeyboardRemove
 
-from database.db import Database, User
+from database.db import db, User
 from routers.functions.funcs import make_keyboard
 from routers.keyboards.inline_keyboards import make_inline_kb
-from aiogram.utils.i18n import gettext as _
 from middlewares.i18n import i18n
 
 router_base = Router(name=__name__)
+_ = i18n.lazy_gettext
 
 
 @router_base.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
-    db = Database()
 
     if db.check_user_mlt(message.from_user.id):
-        lang = db.get_lang(message.from_user.id)
         greeting = str(_("start")).format(full_name=message.from_user.full_name)
         await message.answer(greeting, reply_markup=make_keyboard(["/game"], 1))
     else:
@@ -37,7 +35,6 @@ async def command_start_handler(message: Message) -> None:
 
 @router_base.message(Command("register"))
 async def command_register_handler(message: Message) -> None:
-    db = Database()
 
     if not db.check_user_mlt(message.from_user.id):
         await message.answer(_("Привет выберите язык!"),
@@ -64,7 +61,6 @@ async def command_help_handler(message: Message) -> None:
 
 @router_base.message(Command("followers"))
 async def command_followers_handler(message: Message) -> None:
-    db = Database()
     followers = db.execute("SELECT COUNT(*) FROM users")
     await message.answer(f"Бота использовали {followers[0][0]} Пользователей🤩", reply_markup=ReplyKeyboardRemove())
     print(message.from_user.full_name, message.text)
