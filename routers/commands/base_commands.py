@@ -7,17 +7,17 @@ from database.db import db, User
 from routers.functions.funcs import make_keyboard
 from routers.keyboards.inline_keyboards import make_inline_kb
 from aiogram.utils.i18n import gettext as _
+
 router_base = Router(name=__name__)
 
 
 @router_base.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
-
     if db.check_user_mlt(message.from_user.id):
-        greeting = str(_("start")).format(full_name=message.from_user.full_name)
-        await message.answer(greeting, reply_markup=make_keyboard(["/game"], 1))
+        await message.answer(text=_("start").format(full_name=message.from_user.full_name),
+                             reply_markup=make_keyboard(["/game"], 1))
     else:
-        await message.answer(str(_("Вы еще не зарегестрированы, для регистрации нажмите на /register")),
+        await message.answer(_("Вы еще не зарегистрированы, для регистрации нажмите на /register"),
                              reply_markup=make_keyboard(["/register"]))
     user = User(
         username=message.from_user.username,
@@ -33,12 +33,11 @@ async def command_start_handler(message: Message) -> None:
 
 @router_base.message(Command("register"))
 async def command_register_handler(message: Message) -> None:
-
     if not db.check_user_mlt(message.from_user.id):
         await message.answer(_("Привет выберите язык!"),
                              reply_markup=make_inline_kb(["🇺🇿 uz", "🇷🇺 ru", "🇺🇸 en"], ["uz", "ru", "en"], 2))
     else:
-        await message.answer(_("Вы уже зарегестрированы😊"))
+        await message.answer(_("Вы уже зарегистрированы😊"))
     print(message.from_user.full_name, message.text)
 
 
