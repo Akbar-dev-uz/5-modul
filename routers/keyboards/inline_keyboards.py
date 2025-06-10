@@ -1,34 +1,44 @@
 from aiogram.fsm.context import FSMContext
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from aiogram.types import CallbackQuery
 from aiogram import F, Router
+from aiogram.utils.keyboard import InlineKeyboardBuilder, InlineKeyboardButton
+from aiogram.filters.callback_data import CallbackData
 
 from database.db import db
 from api.get_valute import get_currency
 from routers.states.state_for_register import StateForRegister
 from routers.functions.funcs import send_phone_num
+from .callbacks import Language, Languages
 
 router = Router()
 
 
-def make_inline_kb(texts: list[str], callback_data: list[str], row):
-    if len(texts) != len(callback_data):
-        raise Exception("Incorrect given options")
-    buttons = [InlineKeyboardButton(text=text, callback_data=data)
-               for text, data in zip(texts, callback_data)]
-    keyboard_layout = [buttons[i:i + row] for i in range(0, len(buttons), row)]
-    return InlineKeyboardMarkup(inline_keyboard=keyboard_layout)
+def make_inline_kb(texts: list[str], callback_data: list, row):
+    builder = InlineKeyboardBuilder()
+    builder.add(
+        *[InlineKeyboardButton(text=text, callback_data=callbackdt) for text, callbackdt in zip(texts, callback_data)])
+    builder.adjust(row)
+    return builder.as_markup()
 
 
-@router.callback_query(F.data == 'uz')
-async def catch_uz(call: CallbackQuery, state: FSMContext):
+def kb_for_langs():
+    kb = make_inline_kb(["🇺🇿 uz", "🇷🇺 ru", "🇺🇸 en"],
+                        [Language(lang=Languages.UZ.value).pack(), Language(lang=Languages.RU.value).pack(),
+                         Language(lang=Languages.EN.value).pack()], 2)
+    return kb
+
+
+@router.callback_query(Language.filter())
+async def catch_uz(call: CallbackQuery, callback_data: CallbackData, state: FSMContext):
     user_id = call.from_user.id
     username = call.from_user.username or "Unknown"
-    print(f"Processing language change to 'uz' for user_id={user_id}, username={username}")
+    lang = str(callback_data.lang.value)
+    print(f"Processing language change to '{lang}' for user_id={user_id}, username={username}")
     await call.message.edit_text("🇺🇿Siz o`zbek tilini tanglandingiz!")
     if db.check_user_mlt(user_id):
         result = db.execute(
             "UPDATE users_mlt_lan SET lang = :lang WHERE user_id = :user_id",
-            {'lang': 'uz', 'user_id': user_id}, fetch=False
+            {'lang': lang, 'user_id': user_id}, fetch=False
         )
         print(f"Update result for user_id={user_id}: {result}")
         if result is None:
@@ -39,40 +49,40 @@ async def catch_uz(call: CallbackQuery, state: FSMContext):
             return
         await call.message.answer("✅ Язык успешно обновлен!")
         return
-    await state.update_data(lang='uz')
+    await state.update_data(lang=lang)
     text = "📱 Telefon nomeringizni kiriting:"
     await call.message.answer(text, reply_markup=send_phone_num(text))
     await state.set_state(StateForRegister.phone)
 
 
-@router.callback_query(F.data == 'ru')
-async def catch_ru(call: CallbackQuery, state: FSMContext):
-    await call.message.edit_text("🇷🇺Вы выбрали русский язык!")
-    if db.check_user_mlt(call.from_user.id):
-        db.execute(
-            "UPDATE users_mlt_lan SET lang = :lang WHERE user_id = :user_id",
-            {'lang': 'ru', 'user_id': call.from_user.id}, fetch=False
-        )
-        return
-    await state.update_data(lang='ru')
-    text = "📱 Введите телефон номер:"
-    await call.message.answer(text, reply_markup=send_phone_num(text))
-    await state.set_state(StateForRegister.phone)
-
-
-@router.callback_query(F.data == 'en')
-async def catch_en(call: CallbackQuery, state: FSMContext):
-    await call.message.edit_text("🇺🇸You chosen English language!")
-    if db.check_user_mlt(call.from_user.id):
-        db.execute(
-            "UPDATE users_mlt_lan SET lang = :lang WHERE user_id = :user_id",
-            {'lang': 'en', 'user_id': call.from_user.id}, fetch=False
-        )
-        return
-    await state.update_data(lang='en')
-    text = "📱 Get your phone number:"
-    await call.message.answer(text, reply_markup=send_phone_num(text))
-    await state.set_state(StateForRegister.phone)
+# @router.callback_query(F.data == 'ru')
+# async def catch_ru(call: CallbackQuery, state: FSMContext):
+#     await call.message.edit_text("🇷🇺Вы выбрали русский язык!")
+#     if db.check_user_mlt(call.from_user.id):
+#         db.execute(
+#             "UPDATE users_mlt_lan SET lang = :lang WHERE user_id = :user_id",
+#             {'lang': 'ru', 'user_id': call.from_user.id}, fetch=False
+#         )
+#         return
+#     await state.update_data(lang='ru')
+#     text = "📱 Введите телефон номер:"
+#     await call.message.answer(text, reply_markup=send_phone_num(text))
+#     await state.set_state(StateForRegister.phone)
+#
+#
+# @router.callback_query(F.data == 'en')
+# async def catch_en(call: CallbackQuery, state: FSMContext):
+#     await call.message.edit_text("🇺🇸You chosen English language!")
+#     if db.check_user_mlt(call.from_user.id):
+#         db.execute(
+#             "UPDATE users_mlt_lan SET lang = :lang WHERE user_id = :user_id",
+#             {'lang': 'en', 'user_id': call.from_user.id}, fetch=False
+#         )
+#         return
+#     await state.update_data(lang='en')
+#     text = "📱 Get your phone number:"
+#     await call.message.answer(text, reply_markup=send_phone_num(text))
+#     await state.set_state(StateForRegister.phone)
 
 
 @router.callback_query(F.data.in_(["USD", "RUB", "EUR", "UZS"]))

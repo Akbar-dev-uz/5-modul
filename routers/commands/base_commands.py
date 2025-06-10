@@ -5,7 +5,7 @@ from aiogram.types import Message, ReplyKeyboardRemove
 
 from database.db import db, User
 from routers.functions.funcs import make_keyboard
-from routers.keyboards.inline_keyboards import make_inline_kb
+from routers.keyboards.inline_keyboards import make_inline_kb, kb_for_langs
 from aiogram.utils.i18n import gettext as _
 
 router_base = Router(name=__name__)
@@ -19,14 +19,15 @@ async def command_start_handler(message: Message) -> None:
     else:
         await message.answer(_("Вы еще не зарегистрированы, для регистрации нажмите на /register"),
                              reply_markup=make_keyboard(["/register"]))
-    user = User(
-        username=message.from_user.username,
-        first_name=message.from_user.first_name,
-        last_name=message.from_user.last_name,
-        chat_id=message.chat.id,
-        user_id=message.from_user.id
-    )
-    db.save(user)
+    if not db.check_user(message.from_user.id):
+        user = User(
+            username=message.from_user.username,
+            first_name=message.from_user.first_name,
+            last_name=message.from_user.last_name,
+            chat_id=message.chat.id,
+            user_id=message.from_user.id
+        )
+        db.save(user)
 
     print(message.from_user.full_name, message.text)
 
@@ -35,7 +36,7 @@ async def command_start_handler(message: Message) -> None:
 async def command_register_handler(message: Message) -> None:
     if not db.check_user_mlt(message.from_user.id):
         await message.answer(_("Привет выберите язык!"),
-                             reply_markup=make_inline_kb(["🇺🇿 uz", "🇷🇺 ru", "🇺🇸 en"], ["uz", "ru", "en"], 2))
+                             reply_markup=kb_for_langs())
     else:
         await message.answer(_("Вы уже зарегистрированы😊"))
     print(message.from_user.full_name, message.text)
@@ -67,7 +68,7 @@ async def command_followers_handler(message: Message) -> None:
 @router_base.message(Command("change"))
 async def command_change_lan(message: Message) -> None:
     await message.answer("Привет выберите язык!",
-                         reply_markup=make_inline_kb(["🇺🇿 uz", "🇷🇺 ru", "🇺🇸 en"], ["uz", "ru", "en"], 2))
+                         reply_markup=kb_for_langs())
     print(message.from_user.full_name, message.text)
 
 
