@@ -21,12 +21,23 @@ def make_inline_kb(texts: list[str], callback_data: list[str], row):
 
 @router.callback_query(F.data == 'uz')
 async def catch_uz(call: CallbackQuery, state: FSMContext):
+    user_id = call.from_user.id
+    username = call.from_user.username or "Unknown"
+    print(f"Processing language change to 'uz' for user_id={user_id}, username={username}")
     await call.message.edit_text("🇺🇿Siz o`zbek tilini tanglandingiz!")
-    if db.check_user_mlt(call.from_user.id):
-        db.execute(
+    if db.check_user_mlt(user_id):
+        result = db.execute(
             "UPDATE users_mlt_lan SET lang = :lang WHERE user_id = :user_id",
-            {'lang': 'uz', 'user_id': call.from_user.id}
+            {'lang': 'uz', 'user_id': user_id}, fetch=False
         )
+        print(f"Update result for user_id={user_id}: {result}")
+        if result is None:
+            await call.message.answer("❌ Ошибка при обновлении языка.")
+            return
+        if result == 0:
+            await call.message.answer("❌ Пользователь не найден в базе данных.")
+            return
+        await call.message.answer("✅ Язык успешно обновлен!")
         return
     await state.update_data(lang='uz')
     text = "📱 Telefon nomeringizni kiriting:"
@@ -40,7 +51,7 @@ async def catch_ru(call: CallbackQuery, state: FSMContext):
     if db.check_user_mlt(call.from_user.id):
         db.execute(
             "UPDATE users_mlt_lan SET lang = :lang WHERE user_id = :user_id",
-            {'lang': 'ru', 'user_id': call.from_user.id}
+            {'lang': 'ru', 'user_id': call.from_user.id}, fetch=False
         )
         return
     await state.update_data(lang='ru')
@@ -55,7 +66,7 @@ async def catch_en(call: CallbackQuery, state: FSMContext):
     if db.check_user_mlt(call.from_user.id):
         db.execute(
             "UPDATE users_mlt_lan SET lang = :lang WHERE user_id = :user_id",
-            {'lang': 'en', 'user_id': call.from_user.id}
+            {'lang': 'en', 'user_id': call.from_user.id}, fetch=False
         )
         return
     await state.update_data(lang='en')

@@ -117,15 +117,16 @@ class UsersMlt(Base):
 
 class Database:
     @staticmethod
-    def execute(query, params=None, fetch=True):
+    def execute(query, params=None, fetch=False):
         try:
             with engine.begin() as conn:
                 result = conn.execute(text(query), params or {})
                 if fetch:
                     return result.fetchall()
+                return result.rowcount  # Возвращаем количество затронутых строк
         except Exception as e:
-            print(f"❗ Error executing query: {e}")
-        return None
+            print(f"❗ Error executing query: {query}, Error: {e}")
+            return None
 
     @staticmethod
     def check_user(user_id):
