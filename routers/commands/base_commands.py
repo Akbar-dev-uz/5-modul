@@ -18,7 +18,7 @@ async def command_start_handler(message: Message) -> None:
 
     if db.check_user_mlt(message.from_user.id):
         lang = db.get_lang(message.from_user.id)
-        greeting = str(_("start", locale=lang)).format(full_name=message.from_user.full_name)
+        greeting = str(_("start")).format(full_name=message.from_user.full_name)
         await message.answer(greeting, reply_markup=make_keyboard(["/game"], 1))
     else:
         await message.answer(str(_("Вы еще не зарегестрированы, для регистрации нажмите на /register")),
