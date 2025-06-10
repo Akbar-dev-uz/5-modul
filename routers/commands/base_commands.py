@@ -6,10 +6,8 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from database.db import db, User
 from routers.functions.funcs import make_keyboard
 from routers.keyboards.inline_keyboards import make_inline_kb
-from middlewares.i18n import i18n
-
+from aiogram.utils.i18n import gettext as _
 router_base = Router(name=__name__)
-_ = i18n.lazy_gettext
 
 
 @router_base.message(CommandStart())

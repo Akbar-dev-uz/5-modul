@@ -134,19 +134,6 @@ async def email_insert(message: Message, state: FSMContext) -> None:
     await state.clear()
 
 
-def get_user_id(event) -> int | None:
-    return getattr(getattr(event, "from_user", None), "id", None)
-
-
-async def get_locale(event, *args, **kwargs) -> str:
-    user_id = get_user_id(event)
-    if not user_id:
-        return "en"
-
-    db = Database()
-    return db.get_lang(user_id) or "en"
-
-
 @router.message(F.text)
 async def not_exist_func(message: Message) -> None:
     await message.reply(

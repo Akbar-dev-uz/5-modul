@@ -30,7 +30,7 @@ msgstr "You are not registered yet. To register, press /register."
 
 #: routers/commands/base_commands.py:43
 msgid "Привет выберите язык!"
-msgstr ""
+msgstr "Hi, choose language!"
 
 #: routers/commands/base_commands.py:46
 msgid "Вы уже зарегестрированы😊"

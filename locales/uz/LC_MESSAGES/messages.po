@@ -32,7 +32,7 @@ msgstr ""
 
 #: routers/commands/base_commands.py:43
 msgid "Привет выберите язык!"
-msgstr ""
+msgstr "Salom, tilni tangla"
 
 #: routers/commands/base_commands.py:46
 msgid "Вы уже зарегестрированы😊"
