@@ -49,7 +49,6 @@ async def main() -> None:
 
     dp.update.outer_middleware(i18n_middleware)
 
-    await i18n_middleware.startup(dp)
     await dp.start_polling(bot)
 
 
